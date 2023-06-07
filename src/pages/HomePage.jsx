@@ -13,7 +13,7 @@ const HomePage = () => {
         if(selected === 1){
             navigate("/analyse-lexicale")
         } else {
-            navigate("/commentaires")
+            navigate("/langage-commentaire")
         }
     
   }

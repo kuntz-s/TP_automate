@@ -81,4 +81,22 @@ export const verifyDuplicateTransition = (data) => {
 
 export const transitionDataList = ["state", "object", "target"];
 
+//fonction pour créer le tableau de l'automate
+
+export const createAutomataTable = (data) => {
+    var res = [];
+    const aLenght = data.alphabet.length;
+    for(let elt of data.states){
+        let ins = [];
+        for(let i = 0 ; i < aLenght; i++){
+            let val = data.transitions.filter((trans) => trans.state===elt.name && trans.object === data.alphabet[i]);
+            ins.push(val);
+        }
+        res.push(ins);
+        ins = [];
+    }
+    console.log(res);
+   return res;
+}
+
 

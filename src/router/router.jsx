@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import AnalyseLexicale from "../pages/AnalyseLexicale";
+import LangageCommentaire from "../pages/LangageCommentaire";
 
 export const router = createBrowserRouter([
   {
@@ -17,5 +18,9 @@ export const router = createBrowserRouter([
   {
     path:"/analyse-lexicale",
     element:<AnalyseLexicale/>
+  },
+  {
+    path:"langage-commentaire",
+    element:<LangageCommentaire/>
   }
 ]);
