@@ -5,7 +5,7 @@ import TableVisualisation from "./content/TableVisualisation";
 
 const AutomataContent = ({ data, open }) => {
   const [displayGraph, setDisplayGraph] = useState(false);
-  const [displayMenuItems, setDisplayMenuItems] = useState(true);
+  const [displayMenuItems, setDisplayMenuItems] = useState(false);
   const menuList = [
     {
     id: 0,
@@ -35,7 +35,7 @@ const AutomataContent = ({ data, open }) => {
         <div>En attente</div>
       ) : (
         <div className="relative">
-          <div className=" shadow-lg border border-[#D9D9D9] rounded-full flex shrink fixed top-8 left-[55%] translate-x-[-50%] [&>*]:px-8 [&>*]:py-2 ">
+          <div className=" bg-white shadow-lg border border-[#D9D9D9] rounded-full flex shrink fixed top-6 left-[55%] translate-x-[-50%] [&>*]:px-8 [&>*]:py-2 ">
             <p
               className={`${
                 !displayGraph

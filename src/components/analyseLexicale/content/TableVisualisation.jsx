@@ -23,7 +23,7 @@ const TableVisualisation = ({ data }) => {
           {createAutomataTable(data).map((state, id) => {
             return (
               <tr key={id}>
-                <td className="text-left p-8 border border-slate-300 text-lg font-bold bg-primary text-white">{data.states[id].name}</td>
+                <td className="text-left p-8 border border-slate-300 text-lg font-bold bg-primary text-white">{data.states[id].initial && "-> "}{data.states[id].final && "* "}{data.states[id].name}</td>
                 {state.map((item, id) => {
                   return <td key={id} className="text-left p-8 border border-slate-300">{concatItem(item)}</td>;
                 })}

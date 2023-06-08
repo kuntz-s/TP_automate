@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { toast , ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { useNavigate } from "react-router";
+import { detecterCommentaires } from "../algorithms/langageCommentaire";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Container = ({ title, children }) => {
   return (
@@ -15,11 +17,18 @@ const Container = ({ title, children }) => {
 const LangageCommentaire = () => {
   const navigate = useNavigate();
   const [langage, setLangage] = useState("");
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const generateComment = () => {
     if (langage) {
-      setComment(langage);
+      
+      setIsLoading(true);
+      setTimeout(() => {
+        
+        setIsLoading(false);
+        setComment(detecterCommentaires(langage));
+      }, 1500);
     } else {
       toast.error("veuillez saisir un texte", {
         position: "top-right",
@@ -57,7 +66,18 @@ const LangageCommentaire = () => {
           />
         </Container>
         <Container title="Commentaire">
-          <p>{comment}</p>
+          {isLoading ? (
+           <div className="flex justify-center items-center h-[22vh] ">
+             <CircularProgress size="40px" color="inherit" />
+           </div>
+          ) :
+          ( comment.length === 0 ? (
+            <span>aucun commentaire détecté </span>
+          ) : (
+            comment.map((com, id) => {
+              return <p key="id">{com}</p>;
+            })
+          ))}
         </Container>
       </div>
       <div className="w-full flex justify-center my-4">
@@ -68,7 +88,7 @@ const LangageCommentaire = () => {
           Generer
         </button>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </section>
   );
 };
