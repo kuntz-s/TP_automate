@@ -24,7 +24,7 @@ const Sidebar = ({ data, open }) => {
   };
 
   return (
-    <div className="w-[300px] border-r border-[#D9D9D9]">
+    <div className="w-[300px] h-screen  border-r border-[#D9D9D9]">
       {open ? (
         <p> En attente ...</p>
       ) : (
@@ -38,7 +38,7 @@ const Sidebar = ({ data, open }) => {
           />
           <div className="mt-2 ml-2">
             <p className="flex items-center text-xl font-medium uppercase">
-              <GrGraphQl className="mr-2" /> Automate
+              <GrGraphQl className="mr-2" /> {data.automataName}
             </p>
             <div className="ml-6 text-lg font-medium [&>*]:my-4">
               <div>

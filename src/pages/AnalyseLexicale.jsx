@@ -15,6 +15,7 @@ import {
 const AnalyseLexicale = () => {
   const [automata, setAutomata] = useState({
     alphabet: [],
+    automataName:"",
     statesNumber: 0,
     states: [],
     transitions: [],
@@ -33,6 +34,7 @@ const AnalyseLexicale = () => {
   };
   const handleChange = (e) => {
     if (step === 1) {
+     if(e.target.name === "alphabet"){
       var newAlphabet = [];
       for (let elt of e.target.value.split(" ")) {
         if (elt !== "") {
@@ -40,6 +42,9 @@ const AnalyseLexicale = () => {
         }
       }
       setAutomata({ ...automata, alphabet: [...new Set(newAlphabet)] });
+     } else {
+      setAutomata({...automata,[e.target.name]:e.target.value})
+     }
     } else {
       const name = e.target.name;
       let value = e.target.value;
@@ -106,10 +111,15 @@ const AnalyseLexicale = () => {
 
   const handleNext = () => {
     if (step === 1) {
-      if (automata.alphabet.length === 0) {
-        toastError("veuillez entrer un alphabet");
+      if (automata.alphabet.length === 0 || !automata.automataName) {
+        toastError("veuillez spéicifier des valeurs");
       } else {
-        addStep();
+        const alpha = automata.alphabet.toString();
+        if (alpha.replace(/[^ε]/g, "").length > 1) {
+          toastError("vous ne pouvez avoir qu'un seul caractère ε");
+        } else {
+          addStep();
+        }
       }
     } else if (step === 2) {
       if (parseInt(automata.statesNumber) === 0) {
@@ -130,17 +140,17 @@ const AnalyseLexicale = () => {
           "vous devez avoir au moins un état initial et un état final"
         );
       } else {
-        setAutomata({...automata, transitions:[]})
+        setAutomata({ ...automata, transitions: [] });
         addStep();
       }
     } else if (step === 4) {
-      if(automata.transitions.length === 0){
-        toastError("vous devez entrer au moins une transition")
+      if (automata.transitions.length === 0) {
+        toastError("vous devez entrer au moins une transition");
       } else {
         if (!verifyEmptyTransition(automata.transitions)) {
           if (!verifyDuplicateTransition(automata.transitions)) {
             handleClose();
-            setStep(1);
+           setStep(1);
           } else {
             toastError("veuillez supprimer tous les champs redondants");
           }
@@ -152,9 +162,9 @@ const AnalyseLexicale = () => {
   };
 
   return (
-    <section className="w-screen min-h-screen flex">
-      <Sidebar data={automata} open ={open } />
-      <AutomataContent data={automata} open ={open } />
+    <section className="w-scree overflow-hidden  min-h-screen flex">
+      <Sidebar data={automata} open={open} />
+      <AutomataContent data={automata} open={open} />
       <AutomataModal
         open={open}
         handleClose={handleClose}
