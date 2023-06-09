@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { useNavigate } from "react-router";
-import { detecterCommentaires } from "../algorithms/langageCommentaire";
+import { avoirListeCommentaires } from "../algorithms/langageCommentaire";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Container = ({ title, children }) => {
@@ -27,7 +27,7 @@ const LangageCommentaire = () => {
       setTimeout(() => {
         
         setIsLoading(false);
-        setComment(detecterCommentaires(langage));
+        setComment(avoirListeCommentaires(langage));
       }, 1500);
     } else {
       toast.error("veuillez saisir un texte", {
@@ -75,7 +75,7 @@ const LangageCommentaire = () => {
             <span>aucun commentaire détecté </span>
           ) : (
             comment.map((com, id) => {
-              return <p key="id">{com}</p>;
+              return <p key={id}>{com.slice(2,com.length-2)}</p>;
             })
           ))}
         </Container>
