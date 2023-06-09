@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BsPlus } from "react-icons/bs";
+import { toast, ToastContainer } from "react-toastify";
 import GraphVisualisation from "./content/GraphVisualisation";
 import TableVisualisation from "./content/TableVisualisation";
 import TypeAutomateModal from "./TypeAutomateModal";
@@ -7,6 +8,7 @@ import ReconnaitreTexteModal from "./ReconnaitreTexteModal";
 import { determinerTypeAutomate } from "../../algorithms/typeAutomate";
 import { determiniserAutomate } from "../../algorithms/determinisationAutomate";
 import { minisationAutomate } from "../../algorithms/minimisationAutomate";
+import { reconnaitreMot } from "../../algorithms/reconnaissanceMot";
 
 const AutomataContent = ({ data, open }) => {
   const [displayGraph, setDisplayGraph] = useState(false);
@@ -19,7 +21,11 @@ const AutomataContent = ({ data, open }) => {
   const [displayAutomateMinimisé, setDisplayAutomateMinimisé] = useState(false);
   const [typeAutomate, setTypeAutomate] = useState("");
   const [openRecognitionModal, setOpenRecognitionModal] = useState(false);
-  const [recognitionText, setRecognitionText] = useState({text:"",separator:""});
+  const [recognitionText, setRecognitionText] = useState({
+    text: "",
+    separator: "",
+    answer: [],
+  });
   const menuList = [
     {
       id: 0,
@@ -59,10 +65,42 @@ const AutomataContent = ({ data, open }) => {
       console.log("automata minimisé", minimisé);
       setAutomateMiniminisé(minimisé);
       setDisplayAutomateMinimisé(true);
-    } else if (id === 1){
-        setOpenRecognitionModal(true)
-    }else {
+    } else if (id === 1) {
+      setOpenRecognitionModal(true);
+    } else {
       setDisplayMenuItems(false);
+    }
+  };
+
+  const handleRecognition = () => {
+    if (recognitionText.text.trim().length === 0) {
+      toast.error("veuillez entrer une valeur dans le texte");
+    } else {
+      var textArray, result=[];
+      if (!recognitionText.separator) {
+        textArray = recognitionText.text.split(" ");
+      } else {
+        textArray = recognitionText.text.split(recognitionText.separator);
+      }
+      const type = determinerTypeAutomate(data);
+      var determinisé;
+      if (type.id === 0) {
+        determinisé = data;
+      } else {
+        determinisé = determiniserAutomate(data);
+      }
+      setAutomateDeterminisé(determinisé);
+      for (let mot of textArray) {
+        if (mot) {
+          var ans = reconnaitreMot(determinisé, mot);
+         
+            result.push({
+              texte:mot,
+              res: ans
+            });
+        }
+      }
+      setRecognitionText({...recognitionText, answer:result})
     }
   };
   return (
@@ -141,10 +179,19 @@ const AutomataContent = ({ data, open }) => {
         open={openRecognitionModal}
         handleClose={() => {
           setOpenRecognitionModal(false);
+          setRecognitionText({ text: "", separator: "", answer: "" });
         }}
         data={recognitionText}
-        handleChange={(e) => setRecognitionText({...recognitionText, [e.target.name]:e.target.value})}
+        handleRecognition={handleRecognition}
+        handleChange={(e) =>
+          setRecognitionText({
+            ...recognitionText,
+            [e.target.name]: e.target.value,
+          })
+        }
+      name = {data.automataName}
       />
+      <ToastContainer />
     </div>
   );
 };
