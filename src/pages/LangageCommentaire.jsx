@@ -75,7 +75,7 @@ const LangageCommentaire = () => {
             <span>aucun commentaire détecté </span>
           ) : (
             comment.map((com, id) => {
-              return <p key={id}>{com.slice(2,com.length-2)}</p>;
+              return <p key={id}>{com.slice(2,com.length-2).replaceAll("%*/","*/")}</p>;
             })
           ))}
         </Container>
