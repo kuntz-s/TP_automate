@@ -3,6 +3,7 @@ import { BsPlus } from "react-icons/bs";
 import GraphVisualisation from "./content/GraphVisualisation";
 import TableVisualisation from "./content/TableVisualisation";
 import TypeAutomateModal from "./TypeAutomateModal";
+import ReconnaitreTexteModal from "./ReconnaitreTexteModal";
 import { determinerTypeAutomate } from "../../algorithms/typeAutomate";
 import { determiniserAutomate } from "../../algorithms/determinisationAutomate";
 import { minisationAutomate } from "../../algorithms/minimisationAutomate";
@@ -17,6 +18,8 @@ const AutomataContent = ({ data, open }) => {
     useState(false);
   const [displayAutomateMinimisé, setDisplayAutomateMinimisé] = useState(false);
   const [typeAutomate, setTypeAutomate] = useState("");
+  const [openRecognitionModal, setOpenRecognitionModal] = useState(false);
+  const [recognitionText, setRecognitionText] = useState({text:"",separator:""});
   const menuList = [
     {
       id: 0,
@@ -47,8 +50,6 @@ const AutomataContent = ({ data, open }) => {
       if (type.id === 0) {
         determinisé = data;
       } else {
-        
-      
         determinisé = determiniserAutomate(data);
       }
       setAutomateDeterminisé(determinisé);
@@ -58,8 +59,9 @@ const AutomataContent = ({ data, open }) => {
       console.log("automata minimisé", minimisé);
       setAutomateMiniminisé(minimisé);
       setDisplayAutomateMinimisé(true);
-    } else {
-      alert("il a cliqué ici");
+    } else if (id === 1){
+        setOpenRecognitionModal(true)
+    }else {
       setDisplayMenuItems(false);
     }
   };
@@ -134,6 +136,14 @@ const AutomataContent = ({ data, open }) => {
         data={typeAutomate}
         open={openTypeAutomate}
         handleClose={() => setOpenTypeAutomate(false)}
+      />
+      <ReconnaitreTexteModal
+        open={openRecognitionModal}
+        handleClose={() => {
+          setOpenRecognitionModal(false);
+        }}
+        data={recognitionText}
+        handleChange={(e) => setRecognitionText({...recognitionText, [e.target.name]:e.target.value})}
       />
     </div>
   );
